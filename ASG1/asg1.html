@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>ASG1 - Painting</title>
+</head>
+<!-- https://www.w3schools.com/tags/ev_onload.asp -->
+<body onload="main()">
+<p>Alexandra Arient</p>
+<p>aarient@ucsc.edu</p>
+<p>Notes to Grader: My image is inspired by my recent trip to Japan over spring break where I got to see the cherry blossoms (Sakura) bloom and where I also got to see a couple of Inari Shinto shrines. The messenger for the Inari diety is a fox which is why it is included in the drawing. The things I added in order to make this project "Awesome" is a sakura petal rain animation (click Sakura Rain button). I also added an alpha transparency slider which works when in drawing mode. You can find my inspiration image I found online as well as my sketch I did on my Samsung Tablet of triangles to make this image.</p>
+
+<!-- https://www.w3schools.com/html/html5_canvas.asp -->
+<div style="position:relative;width:400px;height:400px;display:inline-block">
+<canvas id="webgl" width="400" height="400" style="border:1px solid black"></canvas>
+<canvas id="overlay" width="400" height="400" style="position:absolute;left:0;top:0;pointer-events:none"></canvas>
+</div>
+<br>
+
+<!-- https://www.w3schools.com/tags/att_input_type_button.asp -->
+<input type="button" value="Clear Canvas" onclick="clearCanvas()">
+<input type="button" value="Draw Picture" onclick="drawPicture()">
+<input type="button" value="Number Triangles" onclick="numberTriangles()">
+<input type="button" value="Sakura Rain" onclick="sakuraRain()">
+<br><br>
+
+Drawing Mode:
+<input type="button" value="Squares" onclick="g_selectedType='point'">
+<input type="button" value="Triangles" onclick="g_selectedType='triangle'">
+<input type="button" value="Circles" onclick="g_selectedType='circle'">
+<br><br>
+
+<!-- https://www.w3schools.com/tags/att_input_type_range.asp -->
+Shape Color:
+<br>
+Red: <input type="range" id="red" min="0" max="100" value="100" oninput="updateColor()">
+Green: <input type="range" id="green" min="0" max="100" value="0" oninput="updateColor()">
+Blue: <input type="range" id="blue" min="0" max="100" value="0" oninput="updateColor()">
+Alpha: <input type="range" id="alpha" min="0" max="100" value="100" oninput="updateColor()">
+<br><br>
+
+Shape Size: <input type="range" id="size" min="1" max="40" value="10" oninput="g_selectedSize=parseFloat(this.value)">
+(Circles) Segment Count: <input type="range" id="segments" min="3" max="30" value="10" oninput="g_selectedSegments=parseFloat(this.value)">
+
+<br><br>
+<span id="numel"></span>
+<br><br>
+
+<br>
+<p>Inspiration: Tenku no Torii (Sky Torii), Lake Kawaguchiko</p>
+<p>Source: <a href="https://www.facebook.com/groups/destinationjapan/posts/4450751968477540/">Destination Japan - Facebook</a></p>
+<img src="inspiration_image.jpg" width="400">
+<br>
+
+<p>My sketch:</p>
+<img id="refimg" src="reference_image.jpg" width="400" style="display:block">
+
+<script src="Point.js"></script>
+<script src="Triangle.js"></script>
+<script src="Circle.js"></script>
+<script src="asg1.js"></script>
+</body>
+</html>
