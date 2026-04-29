@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ASG2 - Babe the Blue Ox</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 16px;
+			background: #fff;
+			color: #000;
+		}
+		h1 { font-size: 20px; margin: 4px 0; }
+		.subtitle { font-size: 13px; color: #444; margin-bottom: 12px; }
+		.layout { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+		canvas { border: 1px solid #888; }
+		.controls { width: 320px; font-size: 13px; }
+		.row { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+		.row label { width: 90px; }
+		.row input[type="range"] { flex: 1; }
+		.row .val { width: 32px; text-align: right; font-family: monospace; }
+		h3 { font-size: 13px; margin: 10px 0 4px 0; }
+		button { margin: 2px; padding: 4px 8px; }
+		#fps { margin-top: 6px; font-family: monospace; font-size: 12px; color: #555; }
+		.hint { font-size: 12px; color: #666; margin-top: 6px; }
+		.note {
+			
+			padding: 8px 12px;
+			margin: 8px 0 14px 0;
+			font-size: 13px;
+			max-width: 760px;
+			line-height: 1.45;
+		}
+		.note p { margin: 4px 0; }
+	</style>
+</head>
+<body>
+	<h1>Babe the Blue Ox</h1>
+	<div class="subtitle">CSE 160 - Assignment 2: Blocky 3D Animal</div>
+
+	<div class="note">
+		<p><strong>Note to grader:</strong> This is Babe the Blue Ox from Paul Bunyan. I was inspired to make a blue Ox since I was assigned an Ox for this assignment and I have gone on a roadtrip to Klamath, CA where there is a huge statue of a Blue Ox and Paul Bunyan. In the story of Paul Bunyan, a large Blue Ox is his companion.</p>
+		<p><strong>Functionality wise:</strong> The third-level joint is the front-left leg. Drag to rotate, Shift+click for the poke. Cylinders are used for the horns.</p>
+	</div>
+
+	<div class="layout">
+		<div>
+			<canvas id="webgl" width="600" height="600">
+				Your browser does not support the HTML5 canvas element.
+			</canvas>
+			<div id="fps">fps: --</div>
+		</div>
+
+		<div class="controls">
+			<h3>Animation</h3>
+			<button id="btn-anim-on">Animation On</button>
+			<button id="btn-anim-off">Animation Off</button>
+			<button id="btn-reset">Reset Pose</button>
+			<div class="hint">Drag the canvas to rotate. Hold Shift and click for a poke.</div>
+
+			<h3>Global Rotation</h3>
+			<div class="row">
+				<label>Yaw (Y)</label>
+				<input id="slider-yaw" type="range" min="-180" max="180" value="-25">
+				<span class="val" id="val-yaw">-25</span>
+			</div>
+			<div class="row">
+				<label>Pitch (X)</label>
+				<input id="slider-pitch" type="range" min="-90" max="90" value="10">
+				<span class="val" id="val-pitch">10</span>
+			</div>
+
+			<h3>Head &amp; Tail</h3>
+			<div class="row">
+				<label>Head turn</label>
+				<input id="slider-head-yaw" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-head-yaw">0</span>
+			</div>
+			<div class="row">
+				<label>Head tilt</label>
+				<input id="slider-head-pitch" type="range" min="-30" max="30" value="0">
+				<span class="val" id="val-head-pitch">0</span>
+			</div>
+			<div class="row">
+				<label>Tail base</label>
+				<input id="slider-tail-1" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-tail-1">0</span>
+			</div>
+			<div class="row">
+				<label>Tail mid</label>
+				<input id="slider-tail-2" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-tail-2">0</span>
+			</div>
+			<div class="row">
+				<label>Tail tip</label>
+				<input id="slider-tail-3" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-tail-3">0</span>
+			</div>
+
+			<h3>Front-Left Leg (3 joints)</h3>
+			<div class="row">
+				<label>Thigh</label>
+				<input id="slider-fl-thigh" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-fl-thigh">0</span>
+			</div>
+			<div class="row">
+				<label>Calf</label>
+				<input id="slider-fl-calf" type="range" min="-90" max="0" value="0">
+				<span class="val" id="val-fl-calf">0</span>
+			</div>
+			<div class="row">
+				<label>Hoof</label>
+				<input id="slider-fl-hoof" type="range" min="-30" max="30" value="0">
+				<span class="val" id="val-fl-hoof">0</span>
+			</div>
+
+			<h3>Other Legs</h3>
+			<div class="row">
+				<label>FR thigh</label>
+				<input id="slider-fr-thigh" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-fr-thigh">0</span>
+			</div>
+			<div class="row">
+				<label>FR calf</label>
+				<input id="slider-fr-calf" type="range" min="-90" max="0" value="0">
+				<span class="val" id="val-fr-calf">0</span>
+			</div>
+			<div class="row">
+				<label>FR hoof</label>
+				<input id="slider-fr-hoof" type="range" min="-30" max="30" value="0">
+				<span class="val" id="val-fr-hoof">0</span>
+			</div>
+			<div class="row">
+				<label>BL thigh</label>
+				<input id="slider-bl-thigh" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-bl-thigh">0</span>
+			</div>
+			<div class="row">
+				<label>BL calf</label>
+				<input id="slider-bl-calf" type="range" min="-90" max="0" value="0">
+				<span class="val" id="val-bl-calf">0</span>
+			</div>
+			<div class="row">
+				<label>BL hoof</label>
+				<input id="slider-bl-hoof" type="range" min="-30" max="30" value="0">
+				<span class="val" id="val-bl-hoof">0</span>
+			</div>
+			<div class="row">
+				<label>BR thigh</label>
+				<input id="slider-br-thigh" type="range" min="-60" max="60" value="0">
+				<span class="val" id="val-br-thigh">0</span>
+			</div>
+			<div class="row">
+				<label>BR calf</label>
+				<input id="slider-br-calf" type="range" min="-90" max="0" value="0">
+				<span class="val" id="val-br-calf">0</span>
+			</div>
+			<div class="row">
+				<label>BR hoof</label>
+				<input id="slider-br-hoof" type="range" min="-30" max="30" value="0">
+				<span class="val" id="val-br-hoof">0</span>
+			</div>
+		</div>
+	</div>
+
+	<!-- load order: matrix lib first, then shape modules, then the app -->
+	<script src="lib/cuon-matrix-cse160.js"></script>
+	<script src="src/Cube.js"></script>
+	<script src="src/Cylinder.js"></script>
+	<script src="src/asg2.js"></script>
+</body>
+</html>
