@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ASG3 - Ueno Park at Sunset</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 16px;
+			background: #fff;
+			color: #000;
+		}
+		h1 { font-size: 20px; margin: 4px 0; }
+		.subtitle { font-size: 13px; color: #444; margin-bottom: 12px; }
+		.layout { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+		.canvas-wrap { position: relative; }
+		canvas { border: 1px solid #888; display: block; }
+		.controls {
+			width: 320px;
+			font-size: 13px;
+			line-height: 1.5;
+		}
+		#fps { margin-top: 6px; font-family: monospace; font-size: 12px; color: #555; }
+		#hud {
+			position: absolute;
+			top: 12px;
+			left: 12px;
+			padding: 8px 12px;
+			background: rgba(20, 12, 28, 0.62);
+			color: #ffe3a8;
+			border: 1px solid rgba(255, 220, 160, 0.45);
+			border-radius: 6px;
+			font-family: 'Courier New', monospace;
+			font-size: 13px;
+			line-height: 1.35;
+			pointer-events: none;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+		}
+		#hud .hud-title { font-weight: bold; letter-spacing: 0.5px; color: #ffd17a; }
+		#hud .hud-row { margin-top: 2px; }
+		.note {
+			padding: 8px 12px;
+			margin: 8px 0 14px 0;
+			font-size: 13px;
+			max-width: 760px;
+			line-height: 1.45;
+		}
+		.note p { margin: 4px 0; }
+		.key {
+			display: inline-block;
+			padding: 1px 6px;
+			border: 1px solid #888;
+			border-radius: 3px;
+			background: #f3f3f3;
+			font-family: monospace;
+			font-size: 12px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Ueno Park at Sunset</h1>
+	<div class="subtitle">CSE 160 - Assignment 3: First-Person Voxel World</div>
+
+	<div class="note">
+		<p><strong>Note to grader:</strong> This scene is directly inspired by Ueno Park in Tokyo, Japan. The cherry blossom path, the red tori gate, and the pagoda style temple are all drawn from that park at golden hour and when the cherry blossoms are in season. It is a 48x48 blocky version. A tall slim red tori gate with sits in the middle of the path, with a red-and-black temple at the far end. Cherry blossom trees line both sides of the path, and a little village of shops with wood, cream, teal, and charcoal walls sits behind the trees. Babe the Blue Ox (carried over from Assignment 2) is grazing in front of the gate, joined by an orange fox + small fox kit, a Nara-style deer, and a chubby panda. All animals walk in their own loops and the pet counter floats in the top-left of the world.</p>
+		<p><strong>Story / game:</strong> Walk over to Babe and press <span class="key">space</span> to pet him (he will sit for ten seconds and longer if you keep petting). Walk up to a deer and press <span class="key">space</span> to feed it. Both counters are shown in the floating panel inside the world.</p>
+	</div>
+
+	<div class="layout">
+		<div class="canvas-wrap">
+			<canvas id="webgl" width="720" height="540">
+				Your browser does not support the HTML5 canvas element.
+			</canvas>
+			<div id="hud">
+				<div class="hud-title">Park Stats</div>
+				<div class="hud-row" id="hud-pets">pets given to babe: 0</div>
+				<div class="hud-row" id="hud-tip">walk close and press space</div>
+			</div>
+			<div id="fps">fps: --</div>
+		</div>
+
+		<div class="controls">
+			<h3>Controls</h3>
+			<p>
+				<span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> walk around<br>
+				<span class="key">Q</span> turn left, <span class="key">E</span> turn right<br>
+				<strong>Mouse drag</strong> over canvas to look around<br>
+				<span class="key">F</span> add a dirt block in front<br>
+				<span class="key">G</span> remove the block in front<br>
+				Click canvas to add a block, shift-click to remove<br>
+				<span class="key">space</span> pet Babe (when nearby)
+			</p>
+
+			<h3>What is in the world</h3>
+			<p>
+				48x48 voxel park with dirt perimeter walls, stone corner towers, a tall slim red tori gate, a tiered red-and-black temple, two rows of cherry blossom trees, and a small village of shops with four different modern wall textures. Twelve textures total (grass, dirt, stone, bark, blossom, red, black, gold, wood, cream, teal, charcoal). The sky is a solid sunset color.
+			</p>
+		</div>
+	</div>
+
+	<script src="lib/cuon-matrix-cse160.js"></script>
+	<script src="src/Cube.js"></script>
+	<script src="src/Cylinder.js"></script>
+	<script src="src/Camera.js"></script>
+	<script src="src/World.js"></script>
+	<script src="src/Ox.js"></script>
+	<script src="src/Fox.js"></script>
+	<script src="src/Deer.js"></script>
+	<script src="src/Panda.js"></script>
+	<script src="src/asg3.js"></script>
+</body>
+</html>
