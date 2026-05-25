@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ASG4 - Phong Lighting</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 16px;
+			background: #fff;
+			color: #000;
+		}
+		h1 { font-size: 20px; margin: 4px 0; }
+		.subtitle { font-size: 13px; color: #444; margin-bottom: 12px; }
+		.layout { display: flex; gap: 16px; align-items: flex-start; flex-wrap: wrap; }
+		canvas { border: 1px solid #888; cursor: grab; }
+		canvas:active { cursor: grabbing; }
+		.controls { width: 320px; font-size: 13px; }
+		.row { display: flex; align-items: center; gap: 6px; margin: 3px 0; }
+		.row label { width: 90px; }
+		.row input[type="range"] { flex: 1; }
+		.row .val { width: 32px; text-align: right; font-family: monospace; }
+		h3 { font-size: 13px; margin: 10px 0 4px 0; }
+		button { margin: 2px; padding: 4px 8px; }
+		#fps { margin-top: 6px; font-family: monospace; font-size: 12px; color: #555; }
+		.hint { font-size: 12px; color: #666; margin-top: 6px; }
+		.note { padding: 8px 12px; margin: 8px 0 14px 0; font-size: 13px; max-width: 760px; line-height: 1.45; }
+		.note p { margin: 4px 0; }
+	</style>
+</head>
+<body>
+	<h1>Babe the Blue Ox - Phong Lighting</h1>
+	<div class="subtitle">CSE 160 - Assignment 4: Lighting</div>
+
+	<div class="note">
+		<p><strong>Note to grader:</strong> Babe the Blue Ox (carried over from Assignment 2) stands under a blocky sakura cherry blossom tree inspired by assignment 3 with block modifications to make it look more detailed (I am brininging inspiration from my spring break trip all the way into this assignment). A red sphere sits beside Babe the Ox to clearly show the Phong specular highlight.</p>
+	</div>
+
+	<div class="layout">
+		<div>
+			<canvas id="webgl" width="600" height="600"></canvas>
+			<div id="fps">fps: --</div>
+		</div>
+
+		<div class="controls">
+			<h3>Lighting</h3>
+			<button id="btn-light-on">Light On</button>
+			<button id="btn-light-off">Light Off</button>
+
+			<h3>Normal Visualization</h3>
+			<button id="btn-norm-on">Normals On</button>
+			<button id="btn-norm-off">Normals Off</button>
+
+			<h3>Animation</h3>
+			<button id="btn-anim-on">Animation On</button>
+			<button id="btn-anim-off">Animation Off</button>
+			<div class="hint">Drag the canvas to rotate camera.</div>
+
+			<h3>Light Position</h3>
+			<div class="row">
+				<label>Light X</label>
+				<input type="range" id="slider-light-x" min="-3" max="3" step="0.1" value="0">
+				<span class="val" id="val-light-x">0</span>
+			</div>
+			<div class="row">
+				<label>Light Y</label>
+				<input type="range" id="slider-light-y" min="0" max="5" step="0.1" value="2">
+				<span class="val" id="val-light-y">2</span>
+			</div>
+			<div class="row">
+				<label>Light Z</label>
+				<input type="range" id="slider-light-z" min="-3" max="3" step="0.1" value="1">
+				<span class="val" id="val-light-z">1</span>
+			</div>
+
+			<h3>Light Color</h3>
+			<div class="row">
+				<label>Red</label>
+				<input type="range" id="slider-light-r" min="0" max="100" step="1" value="100">
+				<span class="val" id="val-light-r">100</span>
+			</div>
+			<div class="row">
+				<label>Green</label>
+				<input type="range" id="slider-light-g" min="0" max="100" step="1" value="100">
+				<span class="val" id="val-light-g">100</span>
+			</div>
+			<div class="row">
+				<label>Blue</label>
+				<input type="range" id="slider-light-b" min="0" max="100" step="1" value="100">
+				<span class="val" id="val-light-b">100</span>
+			</div>
+
+			<h3>Camera</h3>
+			<div class="row">
+				<label>Yaw (Y)</label>
+				<input type="range" id="slider-cam-y" min="-180" max="180" step="1" value="-25">
+				<span class="val" id="val-cam-y">-25</span>
+			</div>
+			<div class="row">
+				<label>Pitch (X)</label>
+				<input type="range" id="slider-cam-x" min="-80" max="80" step="1" value="15">
+				<span class="val" id="val-cam-x">15</span>
+			</div>
+
+			<h3>Spotlight</h3>
+			<button id="btn-spot-on">Spot On</button>
+			<button id="btn-spot-off">Spot Off</button>
+			<div class="row">
+				<label>Spot X</label>
+				<input type="range" id="slider-spot-x" min="-3" max="3" step="0.1" value="0">
+				<span class="val" id="val-spot-x">0</span>
+			</div>
+			<div class="row">
+				<label>Spot Y</label>
+				<input type="range" id="slider-spot-y" min="0" max="5" step="0.1" value="3">
+				<span class="val" id="val-spot-y">3</span>
+			</div>
+			<div class="row">
+				<label>Spot Z</label>
+				<input type="range" id="slider-spot-z" min="-3" max="3" step="0.1" value="0">
+				<span class="val" id="val-spot-z">0</span>
+			</div>
+
+			<h3>Load OBJ Model</h3>
+			<input type="file" id="obj-file" accept=".obj" style="font-size:12px;">
+		</div>
+	</div>
+
+	<script src="lib/cuon-matrix-cse160.js"></script>
+	<script src="src/Cube.js"></script>
+	<script src="src/Sphere.js"></script>
+	<script src="src/Cylinder.js"></script>
+	<script src="src/ObjModel.js"></script>
+	<script src="src/asg4.js"></script>
+</body>
+</html>
