@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>ASG5 - Paul Bunyan Campsite</title>
+	<style>
+		body { margin: 0; font-family: Arial, sans-serif; background: #fff; color: #000; }
+		.title-bar { padding: 10px 16px; }
+		h1 { font-size: 20px; margin: 4px 0; }
+		.subtitle { font-size: 13px; color: #444; margin-bottom: 8px; }
+		.note {
+			margin: 8px 16px;
+			font-size: 13px;
+			max-width: 760px;
+			line-height: 1.45;
+		}
+		.note p { margin: 4px 0; }
+		#canvas-wrap {
+			width: 100%;
+			height: calc(100vh - 240px);
+			min-height: 400px;
+		}
+		canvas { display: block; }
+		.hint { font-size: 12px; color: #666; margin: 4px 16px 10px 16px; }
+	</style>
+</head>
+<body>
+	<div class="title-bar">
+		<h1>Paul Bunyan Campsite</h1>
+		<div class="subtitle">CSE 160 - Assignment 5: Three.js scene</div>
+	</div>
+
+	<div class="note">
+		<p><strong>Note to grader:</strong> Paul Bunyan campsite with Babe the Blue Ox out front. Continues the theme from my Assignment 2 and little bit from Assignment 3 (Babe inspired by the Klamath, CA statue).</p>
+		<p><strong>Wow feature:</strong> A day / night cycle. The sun arcs across the sky, the directional light color and intensity will change over time. One full day takes 40 seconds to show the change in a timely manner.</p>
+	</div>
+	<div class="hint">Drag to orbit. Scroll wheel to zoom. Right-click drag to pan.</div>
+
+	<div id="canvas-wrap"></div>
+
+	<!-- three.js loaded via importmap from a cdn (no build step needed) -->
+	<!-- https://threejs.org/manual/#en/fundamentals -->
+	<script type="importmap">
+	{
+		"imports": {
+			"three": "https://cdn.jsdelivr.net/npm/three@0.165.0/build/three.module.js",
+			"three/addons/": "https://cdn.jsdelivr.net/npm/three@0.165.0/examples/jsm/"
+		}
+	}
+	</script>
+	<script type="module" src="src/asg5.js"></script>
+</body>
+</html>
